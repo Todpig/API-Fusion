@@ -2,13 +2,13 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView
-from rest_framework import viewsets,generics
-from rest_framework.authentication import BasicAuthentication
+from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
+from rest_framework.authentication import BaseAuthentication
 from .forms import ContatoForm
 from .models import Funcionario, Produtos, Saldo, Servico
-from rest_framework.views import Response, status
+from rest_framework.views import Response
 
 
 class IndexView(FormView):
@@ -53,31 +53,29 @@ def atualiza_estoque(request, id):
     context['saldo'] = Saldo.objects.all()
     return render(request, 'index.html', context)
 
-class ProdutosViewSet(viewsets.ModelViewSet):
+class ProdutosViewSet(generics.ListAPIView):
     queryset = Produtos.objects.all()
     serializer_class = ProdutosSerializer
-    authentication_classes = [BasicAuthentication]
+    
     permission_classes = [IsAuthenticated]
 
-class ServicosViewSet(viewsets.ModelViewSet):
+class ServicosViewSet(generics.ListAPIView):
     queryset = Servico.objects.all()
     serializer_class = ServicoSerializer
-    authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
-class SaldoViewSet(viewsets.ModelViewSet):
+class SaldoViewSet(generics.ListAPIView):
     queryset = Saldo.objects.all()
     serializer_class = SaldoSerializer
-    authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
 class FuncionarioViewSet(generics.ListAPIView):
     queryset = Funcionario.objects.all()
     serializer_class = FuncionarioSerializer
-    # authentication_classes = [BasicAuthentication]
+    
     permission_classes = (IsAuthenticated,)
 
-class LoginViewSet(generics.GenericAPIView):
+class LoginViewSet(generics.ListAPIView):
     serializer_class = LoginSerializer
 
     def post(self, request):

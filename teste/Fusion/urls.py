@@ -1,10 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView
 from django.conf.urls.static import static
 from django.conf import settings
-from Core.views import FuncionarioViewSet, ServicosViewSet, ProdutosViewSet, SaldoViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
