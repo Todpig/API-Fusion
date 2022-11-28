@@ -9,6 +9,7 @@ from .forms import ContatoForm
 from .models import *
 from rest_framework.views import Response
 from Core import permissions
+from rest_framework.authentication import BasicAuthentication
 
 
 class IndexView(FormView):
@@ -57,20 +58,24 @@ class ProdutosViewSet(generics.ListAPIView):
     queryset = Produtos.objects.all()
     serializer_class = ProdutosSerializer
     permission_classes = [IsAuthenticated]
-
+    authentication_classes = [BasicAuthentication]
 class ServicosViewSet(generics.ListAPIView):
     queryset = Servico.objects.all()
     serializer_class = ServicoSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [BasicAuthentication]
 
 class SaldoViewSet(generics.ListAPIView):
     queryset = Saldo.objects.all()
     serializer_class = SaldoSerializer
-    permission_classes = [permissions.VerificaUsuario]      
+    permission_classes = [permissions.VerificaUsuario]
+    authentication_classes = [BasicAuthentication]  
+    
 class FuncionarioViewSet(generics.ListAPIView):
     queryset = Funcionario.objects.all()
     serializer_class = FuncionarioSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [BasicAuthentication]
 
 class LoginViewSet(generics.ListAPIView):
     serializer_class = LoginSerializer
