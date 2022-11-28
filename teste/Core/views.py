@@ -2,13 +2,13 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView
-from rest_framework import viewsets, generics
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
-from rest_framework.authentication import BaseAuthentication
 from .forms import ContatoForm
-from .models import Funcionario, Produtos, Saldo, Servico
+from .models import *
 from rest_framework.views import Response
+from Core import permissions
 
 
 class IndexView(FormView):
@@ -56,7 +56,6 @@ def atualiza_estoque(request, id):
 class ProdutosViewSet(generics.ListAPIView):
     queryset = Produtos.objects.all()
     serializer_class = ProdutosSerializer
-    
     permission_classes = [IsAuthenticated]
 
 class ServicosViewSet(generics.ListAPIView):
@@ -67,13 +66,11 @@ class ServicosViewSet(generics.ListAPIView):
 class SaldoViewSet(generics.ListAPIView):
     queryset = Saldo.objects.all()
     serializer_class = SaldoSerializer
-    permission_classes = [IsAuthenticated]
-
+    permission_classes = [permissions.VerificaUsuario]      
 class FuncionarioViewSet(generics.ListAPIView):
     queryset = Funcionario.objects.all()
     serializer_class = FuncionarioSerializer
-    
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAuthenticated]
 
 class LoginViewSet(generics.ListAPIView):
     serializer_class = LoginSerializer
@@ -82,3 +79,10 @@ class LoginViewSet(generics.ListAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
+
+class ListaProdutosPorId(generics.ListAPIView):
+        def get_queryset(self):
+            queryset = Produtos.objects.get(pk=id)
+            return queryset
+        serializer_class = ProdutosSerializer
+

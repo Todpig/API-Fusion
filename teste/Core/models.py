@@ -55,7 +55,7 @@ class Funcionario(Base):
     facebook = models.CharField('Facebook', max_length=100, default='#')
     twitter = models.CharField('Twitter', max_length=100, default='#')
     instagram = models.CharField('Instagram', max_length=100, default='#')
-
+    
     class Meta:
         verbose_name = 'Funcionário'
         verbose_name_plural = 'Funcionários'
@@ -115,6 +115,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    dono = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 

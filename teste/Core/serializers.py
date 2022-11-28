@@ -1,10 +1,7 @@
 from rest_framework import serializers
 from .models import Funcionario, Produtos, Saldo, Servico, User
 from django.contrib import auth
-from rest_framework.exceptions import AuthenticationFailed, ParseError
-from rest_framework_simplejwt.tokens import RefreshToken
-
-
+from rest_framework.exceptions import AuthenticationFailed
 
 class FuncionarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,7 +29,8 @@ class LoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=255, min_length=3)
     password = serializers.CharField(max_length=68, min_length=6, write_only=True)
     tokens = serializers.SerializerMethodField()
-
+    dono = serializers.BooleanField()
+    
     def get_tokens(self, obj):
         user = User.objects.get(email=obj['email'])
 
@@ -50,8 +48,6 @@ class LoginSerializer(serializers.ModelSerializer):
         password = attrs.get('password', '')
         user = auth.authenticate(email=email, password=password)
 
-      
-
         if not user:
             raise AuthenticationFailed('Credenciais erradas, tente novamente.')
 
@@ -61,4 +57,3 @@ class LoginSerializer(serializers.ModelSerializer):
             'username': user.username,
             'tokens': user.tokens,
         }
-
